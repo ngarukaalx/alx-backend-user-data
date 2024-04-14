@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """This module contains filter_datum function"""
 import re
-from typing import List
+from typing import List, Optional
 import logging
 from logging import Logger
 from os import getenv
@@ -60,7 +60,7 @@ def get_logger() -> Logger:
     return logger
 
 
-def get_db():
+def get_db() -> Optional[mysql.connector.connection.MySQLConnection]:
     """returns a connector to the database"""
     PERSONAL_DATA_DB_USERNAME = getenv('PERSONAL_DATA_DB_USERNAME')
     PERSONAL_DATA_DB_PASSWORD = getenv('PERSONAL_DATA_DB_PASSWORD')
@@ -74,3 +74,30 @@ def get_db():
             database=PERSONAL_DATA_DB_NAME
             )
     return conn
+
+
+def main():
+    """driver fuction"""
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM users;")
+    column_names = [col[0] for col in cursor.description]
+
+    for row in cursor:
+        row_with_names = dict(zip(column_names, row))
+        formatted_string = "; ".join(
+                [f"{key}={value}" for key, value in row_with_names.items()]
+                )
+        log_record = logging.LogRecord("user_data",
+                                       logging.INFO, None, None,
+                                       formatted_string, None, None)
+        formatter = RedactingFormatter(fields=("name",
+                                       "email", "phone", "ssn", "password"))
+        print(formatter.format(log_record))
+    connection.close()
+    cursor.close()
+
+
+if __name__ == "__main__":
+    """runs only main"""
+    main()
