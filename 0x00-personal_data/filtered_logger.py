@@ -4,6 +4,8 @@ import re
 from typing import List
 import logging
 from logging import Logger
+from os import getenv
+import mysql.connector
 
 
 PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
@@ -54,5 +56,21 @@ def get_logger() -> Logger:
     logger.addHandler(handler)
 
     # Disable propagation of log msg to other loggers
-    # logger.propagate = False
+    logger.propagate = False
     return logger
+
+
+def get_db():
+    """returns a connector to the database"""
+    PERSONAL_DATA_DB_USERNAME = getenv('PERSONAL_DATA_DB_USERNAME')
+    PERSONAL_DATA_DB_PASSWORD = getenv('PERSONAL_DATA_DB_PASSWORD')
+    PERSONAL_DATA_DB_HOST = getenv('PERSONAL_DATA_DB_HOST')
+    PERSONAL_DATA_DB_NAME = getenv('PERSONAL_DATA_DB_NAME')
+    # Establish a connection to the MySQl db
+    conn = mysql.connector.connect(
+            host=PERSONAL_DATA_DB_HOST,
+            user=PERSONAL_DATA_DB_USERNAME,
+            password=PERSONAL_DATA_DB_PASSWORD,
+            database=PERSONAL_DATA_DB_NAME
+            )
+    return conn
