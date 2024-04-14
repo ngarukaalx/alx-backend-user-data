@@ -41,7 +41,7 @@ class RedactingFormatter(logging.Formatter):
 
 
 def get_logger() -> Logger:
-    """rturns a logging.logger object"""
+    """returns a logging.logger object"""
     # create a logger named "user_data"
     logger = logging.getLogger("user_data")
     # set logging level
@@ -54,5 +54,5 @@ def get_logger() -> Logger:
     logger.addHandler(handler)
 
     # Disable propagation of log msg to other loggers
-    logger.propagate = False
+    # logger.propagate = False
     return logger
