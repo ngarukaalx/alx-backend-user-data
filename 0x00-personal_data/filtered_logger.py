@@ -50,7 +50,7 @@ def get_logger() -> Logger:
     logger.setLevel(logging.INFO)
     # set StreamHandler and RedactingFormatter as formatter
     handler = logging.StreamHandler()
-    formatter = RedactingFormatter(fields=PII_FIELDS)
+    formatter = RedactingFormatter(list(PII_FIaELDS))
     handler.setFormatter(formatter)
     # add handler to the logger
     logger.addHandler(handler)
@@ -67,7 +67,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     PERSONAL_DATA_DB_HOST = getenv('PERSONAL_DATA_DB_HOST')
     PERSONAL_DATA_DB_NAME = getenv('PERSONAL_DATA_DB_NAME')
     # Establish a connection to the MySQl db
-    conn = mysql.connector.connect(
+    conn = mysql.connector.connection.MySQLConnection(
             host=PERSONAL_DATA_DB_HOST,
             user=PERSONAL_DATA_DB_USERNAME,
             password=PERSONAL_DATA_DB_PASSWORD,
