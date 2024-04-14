@@ -42,7 +42,7 @@ class RedactingFormatter(logging.Formatter):
         return new_msg
 
 
-def get_logger() -> logging.Logger:
+def get_logger() -> Logger:
     """returns a logging.logger object"""
     # create a logger named "user_data"
     logger = logging.getLogger("user_data")
@@ -62,16 +62,16 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """returns a connector to the database"""
-    PERSONAL_DATA_DB_USERNAME = environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
-    PERSONAL_DATA_DB_PASSWORD = environ.get('PERSONAL_DATA_DB_PASSWORD', '')
-    PERSONAL_DATA_DB_HOST = environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    PERSONAL_DATA_DB_NAME = environ.get('PERSONAL_DATA_DB_NAME')
+    user = environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = environ.get('PERSONAL_DATA_DB_PASSWORD', '')
+    host = environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
+    database = environ.get('PERSONAL_DATA_DB_NAME')
     # Establish a connection to the MySQl db
     conn = mysql.connector.connection.MySQLConnection(
-            host=PERSONAL_DATA_DB_HOST,
-            user=PERSONAL_DATA_DB_USERNAME,
-            password=PERSONAL_DATA_DB_PASSWORD,
-            database=PERSONAL_DATA_DB_NAME
+            host=host,
+            user=user,
+            password=password,
+            database=database
             )
     return conn
 
