@@ -15,13 +15,13 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 if getenv('AUTH_TYPE'):
     auth = getenv('AUTH_TYPE')
-if auth:
+if auth == auth:
     from api.v1.auth.auth import Auth
     auth = Auth()
 
 
 @app.before_request
-def filter_request():
+def filter_request() -> None:
     # if auth is none do nothing
     if auth is None:
         pass
@@ -32,7 +32,7 @@ def filter_request():
     if path_auth:
         pass
     header_auth = auth.authorization_header(request)
-    if header_auth is None and path_auth:
+    if path_auth and header_auth is None:
         abort(401)
     current_user = auth.current_user(request)
     if path_auth and current_user is None:
