@@ -24,6 +24,7 @@ if auth == 'basic_auth':
 
 @app.before_request
 def filter_request() -> None:
+    """filter request before request"""
     # if auth is none do nothing
     if auth is None:
         pass
