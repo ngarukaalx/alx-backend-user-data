@@ -13,6 +13,11 @@ class Auth:
         if path is None or excluded_paths is None \
                 or len(excluded_paths) < 1 or path not in excluded_paths:
             return True
+        for val in excluded_paths:
+            pattern = val.split('/')
+            path = path.split('/')
+            if re.match(pattern[-1], path[-1]):
+                return False
         return False
 
     def authorization_header(self, request=None) -> str:
