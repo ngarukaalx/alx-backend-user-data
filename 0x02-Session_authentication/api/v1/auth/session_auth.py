@@ -2,6 +2,7 @@
 """This module contains SessionAuth"""
 from api.v1.auth.auth import Auth
 import uuid
+from flask import request
 
 
 class SessionAuth(Auth):
@@ -22,3 +23,14 @@ class SessionAuth(Auth):
             return None
         user_id = self.user_id_by_session_id.get(session_id)
         return user_id
+
+    def current_user(self, request=None):
+        """returns a User instance based on a cookie value"""
+        from models.user import User
+        # retrive the sesionId
+        cookie_sessionid = super().session_cookie(request)
+        # get the user id
+        user_id = self.user_id_for_session_id(cookie_sessionid)
+        # get user instance
+        user_instance = User.get(user_id)
+        return user_instance
