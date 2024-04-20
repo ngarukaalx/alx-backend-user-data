@@ -12,7 +12,7 @@ import os
 app = Flask(__name__)
 app.register_blueprint(app_views)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-app.debug=True
+app.debug = True
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 auth = getenv('AUTH_TYPE')
@@ -22,6 +22,9 @@ if auth == 'auth':
 if auth == 'basic_auth':
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
+if auth == 'session_auth':
+    from api.v1.auth.session_auth import SessionAuth
+    auth = SessionAuth()
 
 
 @app.before_request
@@ -33,10 +36,14 @@ def filter_request() -> None:
     path_auth = auth.require_auth(request.path,
                                   ['/api/v1/status/',
                                       '/api/v1/unauthorized/',
-                                      '/api/v1/forbidden/'])
+                                      '/api/v1/forbidden/',
+                                      '/api/v1/auth_session/login/'])
     if path_auth:
         pass
+    cookie = auth.session_cookie(request)
     header_auth = auth.authorization_header(request)
+    if header_auth and cookie is None:
+        abort(401)
     if path_auth and header_auth is None:
         abort(401)
     request.current_user = auth.current_user(request)
