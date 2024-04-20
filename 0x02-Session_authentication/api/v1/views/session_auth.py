@@ -10,10 +10,10 @@ def login():
     """handles authectication"""
     # check if email exists
     if 'email' not in request.form:
-        return make_response(jsonify({ "error": "email missing" }), 400)
+        return make_response(jsonify({"error": "email missing"}), 400)
     # check if password exists
     if 'password' not in request.form:
-        return make_response(jsonify({ "error": "password missing" }), 400)
+        return make_response(jsonify({"error": "password missing"}), 400)
     # retrive email and password
     email = request.form.get('email')
     password = request.form.get('password')
@@ -23,13 +23,13 @@ def login():
     # if no user found return error msg
     if len(instance) < 1:
         return make_response(
-                jsonify({ "error": "no user found for this email" }),
+                jsonify({"error": "no user found for this email"}),
                 404
             )
     # check passwoed if its valid for the instance
     is_valid_password = instance[0].is_valid_password(password)
     if not is_valid_password:
-        return make_response(jsonify({ "error": "wrong password" }), 401)
+        return make_response(jsonify({"error": "wrong password"}), 401)
     # get the user id
     user_id = instance[0].id
     # create a session id

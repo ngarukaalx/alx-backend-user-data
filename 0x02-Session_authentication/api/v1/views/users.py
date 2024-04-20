@@ -5,7 +5,6 @@ from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models.user import User
 
-
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def view_all_users() -> str:
     """ GET /api/v1/users
@@ -25,7 +24,9 @@ def view_one_user(user_id: str = None) -> str:
       - User object JSON represented
       - 404 if the User ID doesn't exist
     """
+    print("this the current user: {}".format(request.current_user))
     if user_id == 'me' and request.current_user is None:
+        print("current user is none")
         abort(404)
     if user_id == 'me' and request.current_user:
         # get the current user instance
