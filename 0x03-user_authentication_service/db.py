@@ -54,12 +54,13 @@ class DB:
             raise NoResultFound()
         return user
 
-    def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """updates the user object with provided **kwargs"""
-        try:
-            user = self.find_user_by(id=user_id)
-            for key, value in kwargs.items():
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            try:
+                getattr(user, key)
                 user.key = value
-            self._session.commit()
-        except InvalidRequestError:
-            raise ValueError()
+                self._session.commit()
+            except AttributeError:
+                raise ValueError()
