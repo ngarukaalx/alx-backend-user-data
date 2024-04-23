@@ -4,6 +4,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
+from typing import Dict, Optional
 
 from user import User, Base
 
@@ -35,3 +38,18 @@ class DB:
         self._session.add(new_user)
         self._session.commit()
         return new_user
+
+    def find_user_by(self, **kwargs: Dict[str, str]) -> Optional[User]:
+        """Returns the first row found inthe user
+        table as filtered by the methods input
+        """
+        query = self._session.query(User)
+        for key, value in kwargs.items():
+            try:
+                query = query.filter(getattr(User, key) == value)
+            except AttributeError:
+                raise InvalidRequestError()
+        user = query.first()
+        if user is None:
+            raise NoResultFound()
+        return user
