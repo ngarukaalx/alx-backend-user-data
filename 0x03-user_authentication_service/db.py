@@ -39,7 +39,7 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs: Dict[str, str]):
+    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """Returns the first row found inthe user
         table as filtered by the methods input
         """
