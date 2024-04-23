@@ -1,4 +1,4 @@
-#!/user/bin/env python3
+#!/usr/bin/env python3
 """This module contains _hash_password"""
 import bcrypt
 
