@@ -64,13 +64,13 @@ class Auth:
         """create session id and save it to the database"""
         try:
             user = self._db.find_user_by(email=email)
+        except Exception:
+            return None
+        if user:
             session_id = _generate_uuid()
             self._db.update_user(user.id, session_id=session_id)
             return session_id
-        except NoResultFound:
-            return
-        except InvalidRequestError:
-            return
+        return None
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """find user by session id"""
