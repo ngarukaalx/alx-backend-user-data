@@ -59,7 +59,9 @@ class DB:
         user = self.find_user_by(id=user_id)
         for key, value in kwargs.items():
             try:
-                setattr(user, key)
+                if not hasattr(user, key):
+                    raise ValueError()
+                setattr(user, key, value)
             except AttributeError:
                 raise ValueError()
         self._session.commit()
