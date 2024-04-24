@@ -70,9 +70,9 @@ class Auth:
             self._db.update_user(user.id, session_id=session)
             return session
         except NoResultFound:
-            return None
+            pass
         except InvalidRequestError:
-             return None
+            pass
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """find user by session id"""
