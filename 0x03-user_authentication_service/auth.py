@@ -66,7 +66,7 @@ class Auth:
             user = self._db.find_user_by(email=email)
             # crete session id
             session = _generate_uuid()
-            # update user with the session_id
+            #update user with the session_id
             self._db.update_user(user.id, session_id=session)
             return session
         except NoResultFound:
