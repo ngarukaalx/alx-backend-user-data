@@ -44,7 +44,9 @@ class DB:
         table as filtered by the methods input
         """
         query = self._session.query(User)
+        print(query.__dict__)
         for key, value in kwargs.items():
+            print("find user key: {} value: {}".format(key, value))
             try:
                 query = query.filter(getattr(User, key) == value)
             except AttributeError:

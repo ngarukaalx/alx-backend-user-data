@@ -48,6 +48,37 @@ def log_in():
     abort(401)
 
 
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+def log_out():
+    """logs out a user"""
+    session_id = request.cookies.get('session_id')
+    if session_id:
+        # get user
+        user = AUTH.get_user_from_session_id(session_id)
+        if user is None:
+            # if user does not exist respond with 403
+            abort(403)
+        else:
+            AUTH.destroy_session(user.id)
+            # Redirect the user to the GET / route
+            return redirect(url_for('pay_load'))
+
+
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+def user_profile():
+    """get user profile"""
+    # get session_id form request
+    session_id = request.cookies.get('session_id')
+    print(session_id)
+    # find user
+    user = AUTH.get_user_from_session_id(session_id)
+    print("This user: {}".format(user))
+    if user:
+        return make_response(jsonify({"email": user.email}), 200)
+    else:
+        abort(403)
+
+
 if __name__ == "__main__":
     """main function"""
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port="5000", debug=True)

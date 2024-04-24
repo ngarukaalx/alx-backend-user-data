@@ -6,6 +6,7 @@ from user import User
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import uuid
+from typing import Union
 
 
 def _hash_password(password: str) -> bytes:
@@ -72,4 +73,29 @@ class Auth:
         except NoResultFound:
             return None
         except InvalidRequestError:
+            return None
+
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+        """find user by session id"""
+        if session_id is None:
+            return None
+        try:
+            # check if user exists
+            print("form auth session is =>{}".format(session_id))
+            user = self._db.find_user_by("session_id"=session_id)
+            print("From auth:{}".fomat(user))
+            return user
+        except InvalidRequestError:
+            print("invalid")
+            return None
+        except NoResultFound:
+            print("not found")
+            return None
+
+    def destroy_session(self, user_id: int) -> None:
+        """Destroy session"""
+        try:
+            self._db.update_user(user_id, session_id=None)
+            return None
+        except ValueError:
             return None
