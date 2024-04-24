@@ -60,17 +60,18 @@ class Auth:
             return False
 
     def create_session(self, email: str) -> str:
-        """create session id and save it to the database
-        returns the session_id after udtating the user"""
+        """create session id and save it to the database"""
         try:
             user = self._db.find_user_by(email=email)
-            session = _generate_uuid()
-            self._db.update_user(user.id, session_id=session)
-            return session
+            session_id = _generate_uuid()
+            self._db.update_user(user.id, session_id=session_id)
+            return session_id
         except NoResultFound:
             return
+        except InvalidRequestError:
+            return
 
-    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+    def get_user_from_session_id(self, session_id: str) -> Optional[User]:
         """find user by session id"""
         if session_id is None:
             return None
