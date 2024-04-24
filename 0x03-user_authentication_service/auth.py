@@ -68,7 +68,7 @@ class Auth:
             session = _generate_uuid()
             # update user with the session_id
             self._db.update_user(user.id, session_id=session)
-            return session
+            # return session
         except NoResultFound:
             pass
 
