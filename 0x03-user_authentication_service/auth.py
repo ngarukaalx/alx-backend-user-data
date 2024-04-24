@@ -36,3 +36,18 @@ class Auth:
                 return
             if user is not None:
                 raise ValueError(f"User {email} already exists")
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """credentials validation"""
+        # locate the user
+        try:
+            user = self._db.find_user_by(email=email)
+            hashed_password = user.hashed_password
+            # check if password match
+            password = password.encode('utf-8')
+            # check if encripted password match str password
+            return bcrypt.checkpw(password, hashed_password)
+        except NoResultFound:
+            return False
+        except InvalidRequestError:
+            return False
