@@ -68,9 +68,9 @@ class Auth:
             session = _generate_uuid()
             # update user with the session_id
             self._db.update_user(user.id, session_id=session)
-            # return session
+            return session
         except NoResultFound:
-            pass
+            return
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """find user by session id"""
