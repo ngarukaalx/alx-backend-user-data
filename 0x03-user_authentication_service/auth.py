@@ -61,19 +61,19 @@ class Auth:
 
     def create_session(self, email: str) -> str:
         """create session id and save it to the database"""
-        try:
-            # get the user
-            user = self._db.find_user_by(email=email)
-            user_id = user.id
-            # crete session id
-            session_id = _generate_uuid()
-            # update user with the session_id
-            self._db.update_user(user_id, session_id=session_id)
-            return session_id
-        except NoResultFound:
-            return None
-        except InvalidRequestError:
-            return None
+        # try:
+        # get the user
+        user = self._db.find_user_by(email=email)
+        user_id = user.id
+        # crete session id
+        session = _generate_uuid()
+        # update user with the session_id
+        self._db.update_user(user_id, session_id=session)
+        return session
+        # except NoResultFound:
+        #    return None
+        # except InvalidRequestError:
+            # return None
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """find user by session id"""
@@ -81,15 +81,11 @@ class Auth:
             return None
         try:
             # check if user exists
-            print("form auth session is =>{}".format(session_id))
-            user = self._db.find_user_by("session_id"=session_id)
-            print("From auth:{}".fomat(user))
+            user = self._db.find_user_by(session_id=session_id)
             return user
         except InvalidRequestError:
-            print("invalid")
             return None
         except NoResultFound:
-            print("not found")
             return None
 
     def destroy_session(self, user_id: int) -> None:

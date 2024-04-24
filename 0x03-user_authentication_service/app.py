@@ -39,6 +39,7 @@ def log_in():
     is_valid = AUTH.valid_login(email, password)
     if is_valid:
         session_id = AUTH.create_session(email)
+        # update the user with its session_id
         response = make_response(
                 jsonify({"email": email, "message": "logged in"})
                 )
@@ -69,10 +70,8 @@ def user_profile():
     """get user profile"""
     # get session_id form request
     session_id = request.cookies.get('session_id')
-    print(session_id)
     # find user
     user = AUTH.get_user_from_session_id(session_id)
-    print("This user: {}".format(user))
     if user:
         return make_response(jsonify({"email": user.email}), 200)
     else:
