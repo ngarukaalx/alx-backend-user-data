@@ -71,7 +71,7 @@ class Auth:
         except InvalidRequestError:
             return
 
-    def get_user_from_session_id(self, session_id: str):
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """find user by session id"""
         if session_id is None:
             return None
