@@ -67,14 +67,9 @@ class Auth:
             # crete session id
             session = _generate_uuid()
             # update user with the session_id
-            try:
-                self._db.update_user(user.id, session_id=session)
-            except ValueError:
-                pass
+            self._db.update_user(user.id, session_id=session)
             return session
         except NoResultFound:
-            pass
-        except InvalidRequestError:
             pass
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
