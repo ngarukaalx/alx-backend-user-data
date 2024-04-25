@@ -103,7 +103,7 @@ class Auth:
             self._db.update_user(user.id, reset_token=uuid_str)
             return uuid_str
         except InvalidRequestError:
-            return
+            raise ValueError()
         except NoResultFound:
             # raise value error if the user does not exists
             raise ValueError()
