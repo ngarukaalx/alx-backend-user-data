@@ -89,9 +89,8 @@ class Auth:
         """Destroy session"""
         try:
             self._db.update_user(user_id, session_id=None)
-            return None
         except ValueError:
-            return None
+            pass
 
     def get_reset_password_token(self, email: str) -> str:
         """generate reset password token"""
