@@ -116,5 +116,7 @@ class Auth:
             # update user with new password
             self._db.update_user(user.id, hashed_password=hashed_pass)
             self._db.update_user(user.id, rest_token=None)
-        except Exception:
+        except InvalidRequestError:
+            raise ValueError()
+        except NoResultFound:
             raise ValueError()
