@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """module constain app flask"""
-from flask import Flask, jsonify, make_response, request, abort, redirect, url_for
+from flask import (
+        Flask, jsonify, make_response,
+        request, abort, redirect, url_for
+        )
 from auth import Auth
 
 AUTH = Auth()
